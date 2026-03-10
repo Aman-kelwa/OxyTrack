@@ -1,4 +1,5 @@
 const Booking = require("../models/Booking");
+const Hospital = require("../models/Hospital");
 
 exports.createBooking = async (req, res) => {
   try {
@@ -43,6 +44,35 @@ exports.updateBookingStatus = async (req, res) => {
         message: "Booking not found",
       });
     }
+
+    if (status === "APPROVED") {
+      const hospital = await Hospital.findById(booking.hospital);
+
+      if (!hospital) {
+        res.status(404).json({
+          message: "Hospital not found",
+        });
+      }
+      if (booking.bedType === "ICU") {
+        if (hospital.availableICU <= 0) {
+          return res.status(400).json({
+            message: "ICU Beds are not available",
+          });
+        }
+        hospital.availableICU -= 1;
+      }
+      //updating oxygen beds
+      if (booking.bedType === "OXYGEN") {
+        if (hospital.availableOxygenBeds <= 0) {
+          return res.status(400).json({
+            message: "Oxygen Beds are not available",
+          });
+        }
+        hospital.availableOxygenBeds -= 1;
+      }
+      await hospital.save();
+    }
+
     booking.status = status;
     await booking.save();
 
