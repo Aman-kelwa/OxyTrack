@@ -1,11 +1,12 @@
-import { useState } from "react";
-
 import "./App.css";
+import Resgister from "./pages/Register";
 
 function App() {
   return (
     <>
-      <div>Hello</div>
+      <div className="bg-amber-500">Hello world</div>
+
+      <Resgister />
     </>
   );
 }

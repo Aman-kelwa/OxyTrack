@@ -39,6 +39,12 @@ exports.updateBookingStatus = async (req, res) => {
 
     const booking = await Booking.findById(id);
 
+    if (req.user.role !== "hospital") {
+      return res.status(403).json({
+        message: "Only hospital can approve bookings",
+      });
+    }
+
     if (!booking) {
       res.status(404).json({
         message: "Booking not found",
@@ -72,7 +78,11 @@ exports.updateBookingStatus = async (req, res) => {
       }
       await hospital.save();
     }
-
+    if (booking.status === "APPROVED") {
+      return res.status(400).json({
+        message: "Booking already approved",
+      });
+    }
     booking.status = status;
     await booking.save();
 
