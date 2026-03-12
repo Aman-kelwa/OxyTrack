@@ -18,9 +18,17 @@ function Login() {
         password,
       });
 
+      const { token, user } = res.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role);
       localStorage.setItem("token", res.data.token);
 
-      navigate("/dashboard");
+      if (user.role === "hospital") {
+        navigate("/dashboard");
+      } else {
+        navigate("/hospitals");
+      }
     } catch (err) {
       setError("Invalid email or password");
     }
