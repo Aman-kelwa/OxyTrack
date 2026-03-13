@@ -23,6 +23,12 @@ const hospitalSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    hospitalType: {
+      type: String,
+      enum: ["Government", "Private", "NGO", "Emergency"],
+      required: true,
+      default: "Private",
+    },
   },
   { timestamps: true },
 );

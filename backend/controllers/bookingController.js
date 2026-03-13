@@ -39,55 +39,57 @@ exports.updateBookingStatus = async (req, res) => {
 
     const booking = await Booking.findById(id);
 
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
     if (req.user.role !== "hospital") {
       return res.status(403).json({
         message: "Only hospital can approve bookings",
       });
     }
 
-    if (!booking) {
-      res.status(404).json({
-        message: "Booking not found",
+    // NEW CHECK
+    if (booking.status !== "PENDING") {
+      return res.status(400).json({
+        message: `Booking already ${booking.status}`,
       });
     }
 
-    if (status === "APPROVED") {
-      const hospital = await Hospital.findById(booking.hospital);
+    const hospital = await Hospital.findById(booking.hospital);
 
-      if (!hospital) {
-        res.status(404).json({
-          message: "Hospital not found",
-        });
-      }
+    if (status === "APPROVED") {
       if (booking.bedType === "ICU") {
         if (hospital.availableICU <= 0) {
           return res.status(400).json({
-            message: "ICU Beds are not available",
+            message: "No ICU beds available",
           });
         }
+
         hospital.availableICU -= 1;
       }
-      //updating oxygen beds
+
       if (booking.bedType === "OXYGEN") {
         if (hospital.availableOxygenBeds <= 0) {
           return res.status(400).json({
-            message: "Oxygen Beds are not available",
+            message: "No oxygen beds available",
           });
         }
+
         hospital.availableOxygenBeds -= 1;
       }
+
       await hospital.save();
     }
-    if (booking.status === "APPROVED") {
-      return res.status(400).json({
-        message: "Booking already approved",
-      });
-    }
+
     booking.status = status;
+
     await booking.save();
 
     res.json({
-      message: "Booking Update Successfully",
+      message: `Booking ${status}`,
       booking,
     });
   } catch (error) {

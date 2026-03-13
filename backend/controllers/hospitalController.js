@@ -76,3 +76,25 @@ exports.updateBeds = async (req, res) => {
     });
   }
 };
+
+exports.deleteHospital = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const hospital = await Hospital.findByIdAndDelete(id);
+
+    if (!hospital) {
+      return res.status(404).json({
+        message: "Hospital not found",
+      });
+    }
+
+    res.json({
+      message: "Hospital deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

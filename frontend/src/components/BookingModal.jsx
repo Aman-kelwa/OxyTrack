@@ -1,6 +1,5 @@
-import axios from "axios";
-import React from "react";
 import { useState } from "react";
+import axios from "axios";
 
 function BookingModal({ hospital, closeModal }) {
   const [patientName, setPatientName] = useState("");
@@ -29,64 +28,62 @@ function BookingModal({ hospital, closeModal }) {
           },
         },
       );
-      alert("Booking request send");
+
+      alert("Booking request sent");
+
       closeModal();
     } catch (error) {
       alert("Booking failed");
-      console.log("Error", error);
     }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50">
-      <div className="bg-gray-900 p-8 rounded-xl w-96 text-white">
-        <h2 className="text-2xl font-bold mb-6">Book Bed at {hospital.name}</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+      <form
+        onSubmit={handleBooking}
+        className="bg-white p-8 rounded-xl w-96 space-y-4"
+      >
+        <h2 className="text-xl font-bold">Book Bed</h2>
 
-        <form onSubmit={handleBooking} className="space-y-4">
-          <input
-            type="text"
-            placeholder="Patient Name"
-            required
-            className="w-full p-3 rounded bg-gray-800"
-            onChange={(e) => setPatientName(e.target.value)}
-          />
+        <input
+          placeholder="Patient Name"
+          onChange={(e) => setPatientName(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
 
-          <input
-            type="number"
-            placeholder="Age"
-            required
-            className="w-full p-3 rounded bg-gray-800"
-            onChange={(e) => setAge(e.target.value)}
-          />
+        <input
+          placeholder="Age"
+          type="number"
+          onChange={(e) => setAge(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
 
-          <input
-            type="text"
-            placeholder="Condition"
-            required
-            className="w-full p-3 rounded bg-gray-800"
-            onChange={(e) => setCondition(e.target.value)}
-          />
+        <input
+          placeholder="Condition"
+          onChange={(e) => setCondition(e.target.value)}
+          className="w-full border p-2 rounded"
+        />
 
-          <select
-            className="w-full p-3 rounded bg-gray-800"
-            onChange={(e) => setBedType(e.target.value)}
-          >
-            <option value="ICU">ICU</option>
-            <option value="OXYGEN">Oxygen</option>
-          </select>
+        <select
+          onChange={(e) => setBedType(e.target.value)}
+          className="w-full border p-2 rounded"
+        >
+          <option value="ICU">ICU</option>
+          <option value="OXYGEN">Oxygen</option>
+        </select>
 
-          <button className="w-full bg-cyan-500 py-2 rounded-lg hover:bg-cyan-400 transition">
-            Submit Booking
-          </button>
-        </form>
+        <button className="bg-indigo-600 text-white w-full py-2 rounded">
+          Submit
+        </button>
 
         <button
+          type="button"
           onClick={closeModal}
-          className="mt-4 w-full border border-gray-400 py-2 rounded-lg"
+          className="w-full border py-2 rounded"
         >
           Cancel
         </button>
-      </div>
+      </form>
     </div>
   );
 }
