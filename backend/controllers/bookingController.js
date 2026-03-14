@@ -19,11 +19,34 @@ exports.createBooking = async (req, res) => {
   }
 };
 
+// exports.getBooking = async (req, res) => {
+//   try {
+//     const bookings = await Booking.find()
+//       .populate("hospital")
+//       .populate("createdBy", "name email");
+//     res.json(bookings);
+//   } catch (error) {
+//     res.status(500).json({
+//       message: error.message,
+//     });
+//   }
+// };
 exports.getBooking = async (req, res) => {
   try {
-    const bookings = await Booking.find()
-      .populate("hospital")
-      .populate("createdBy", "name email");
+    let bookings;
+
+    if (req.user.role === "citizen") {
+      bookings = await Booking.find({
+        createdBy: req.user._id,
+      })
+        .populate("hospital", "name city")
+        .populate("createdBy", "name email");
+    } else if (req.user.role === "hospital") {
+      bookings = await Booking.find()
+        .populate("hospital")
+        .populate("createdBy", "name email");
+    }
+
     res.json(bookings);
   } catch (error) {
     res.status(500).json({

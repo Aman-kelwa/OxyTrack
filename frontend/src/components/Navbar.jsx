@@ -1,80 +1,92 @@
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 function Navbar() {
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
-  const role = localStorage.getItem("role");
+  const [role, setRole] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const userRole = localStorage.getItem("role");
+    const userToken = localStorage.getItem("token");
+
+    setRole(userRole);
+    setToken(userToken);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+
     navigate("/");
+
+    window.location.reload();
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 shadow-lg">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 w-full bg-white shadow z-50">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* LOGO */}
-        <Link to="/" className="flex items-center gap-3">
-          <span className="text-xl font-bold text-white">OxyTrack</span>
+
+        <Link to="/" className="text-xl font-bold text-indigo-600">
+          OxyTrack
         </Link>
 
         {/* NAV LINKS */}
-        <div className="hidden md:flex gap-8 text-white font-medium">
-          <Link to="/" className="hover:text-cyan-200 transition">
-            Home
+
+        <div className="flex gap-6 items-center">
+          <Link to="/hospitals" className="text-gray-700 hover:text-indigo-600">
+            Hospitals
           </Link>
 
-          {/* Citizen Navigation */}
+          {/* Citizen Only */}
+
           {role === "citizen" && (
-            <Link to="/hospitals" className="hover:text-cyan-200 transition">
-              Hospitals
+            <Link
+              to="/my-bookings"
+              className="text-gray-700 hover:text-indigo-600"
+            >
+              My Bookings
             </Link>
           )}
 
-          {/* Hospital Navigation */}
+          {/* Hospital Only */}
+
           {role === "hospital" && (
-            <Link to="/dashboard" className="hover:text-cyan-200 transition">
+            <Link
+              to="/dashboard"
+              className="text-gray-700 hover:text-indigo-600"
+            >
               Dashboard
             </Link>
           )}
-        </div>
 
-        {/* RIGHT SIDE BUTTONS */}
+          {/* Auth Buttons */}
 
-        <div className="flex gap-3">
-          {!token && (
+          {!token ? (
             <>
-              <motion.div whileHover={{ scale: 1.05 }}>
-                <Link
-                  to="/login"
-                  className="px-4 py-2 border border-white rounded-lg text-white hover:bg-white hover:text-indigo-600 transition"
-                >
-                  Login
-                </Link>
-              </motion.div>
+              <Link
+                to="/login"
+                className="px-4 py-2 border rounded hover:bg-gray-100"
+              >
+                Login
+              </Link>
 
-              <motion.div whileHover={{ scale: 1.05 }}>
-                <Link
-                  to="/register"
-                  className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-semibold hover:scale-105 transition"
-                >
-                  Sign Up
-                </Link>
-              </motion.div>
+              <Link
+                to="/register"
+                className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-500"
+              >
+                Sign Up
+              </Link>
             </>
-          )}
-
-          {token && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
+          ) : (
+            <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-white text-indigo-600 rounded-lg font-semibold"
+              className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400"
             >
               Logout
-            </motion.button>
+            </button>
           )}
         </div>
       </div>
