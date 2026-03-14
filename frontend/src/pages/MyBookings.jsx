@@ -5,24 +5,34 @@ function MyBookings() {
   const [bookings, setBookings] = useState([]);
 
   const fetchBookings = async () => {
-    try {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:5000/api/booking", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const res = await axios.get("http://localhost:5000/api/booking", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      setBookings(res.data);
-    } catch (error) {
-      console.log(error);
-    }
+    setBookings(res.data);
   };
 
   useEffect(() => {
     fetchBookings();
   }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this booking?")) return;
+
+    const token = localStorage.getItem("token");
+
+    await axios.delete(`http://localhost:5000/api/booking/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    fetchBookings();
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 pt-24 px-10">
@@ -37,29 +47,15 @@ function MyBookings() {
               key={booking._id}
               className="bg-white p-6 rounded-xl shadow border"
             >
-              {/* Hospital Name */}
-
               <h2 className="text-lg font-bold">
-                {booking.hospital
-                  ? booking.hospital.name
-                  : "Hospital unavailable"}
+                {booking.hospital?.name || "Hospital unavailable"}
               </h2>
 
-              {/* Hospital City */}
-
-              <p className="text-sm text-gray-500">
-                {booking.hospital?.city || "Unknown city"}
-              </p>
-
-              {/* Patient */}
+              <p className="text-sm text-gray-500">{booking.hospital?.city}</p>
 
               <p className="mt-3">Patient: {booking.patientName}</p>
 
-              {/* Bed Type */}
-
               <p>Bed Type: {booking.bedType}</p>
-
-              {/* Status */}
 
               <p className="mt-2">
                 Status:
@@ -76,6 +72,15 @@ function MyBookings() {
                   {booking.status}
                 </span>
               </p>
+
+              {booking.status !== "PENDING" && (
+                <button
+                  onClick={() => handleDelete(booking._id)}
+                  className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-400"
+                >
+                  Delete Booking
+                </button>
+              )}
             </div>
           ))}
         </div>

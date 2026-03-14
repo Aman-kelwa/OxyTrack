@@ -6,28 +6,47 @@ const hospitalSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     city: {
       type: String,
       required: true,
     },
-    address: String,
-    contactNumber: String,
 
-    totalICU: Number,
-    availableICU: Number,
-
-    totalOxygenBeds: Number,
-    availableOxygenBeds: Number,
-
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    address: {
+      type: String,
+      required: true,
     },
+
     hospitalType: {
       type: String,
       enum: ["Government", "Private", "NGO", "Emergency"],
       required: true,
       default: "Private",
+    },
+
+    totalICU: {
+      type: Number,
+      required: true,
+    },
+
+    availableICU: {
+      type: Number,
+      required: true,
+    },
+
+    totalOxygenBeds: {
+      type: Number,
+      required: true,
+    },
+
+    availableOxygenBeds: {
+      type: Number,
+      required: true,
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true },

@@ -2,25 +2,36 @@ import axios from "axios";
 
 function BookingCard({ booking, refreshBookings }) {
   const handleStatus = async (status) => {
-    try {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      const res = await axios.patch(
-        `http://localhost:5000/api/booking/update/${booking._id}`,
-        { status },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    await axios.patch(
+      `http://localhost:5000/api/booking/update/${booking._id}`,
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      },
+    );
 
-      alert(res.data.message);
+    refreshBookings();
+  };
 
-      refreshBookings();
-    } catch (error) {
-      alert(error.response?.data?.message || "Error");
-    }
+  const handleDelete = async () => {
+    if (!window.confirm("Delete this booking?")) return;
+
+    const token = localStorage.getItem("token");
+
+    await axios.delete(
+      `http://localhost:5000/api/booking/delete/${booking._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    refreshBookings();
   };
 
   return (
@@ -31,10 +42,7 @@ function BookingCard({ booking, refreshBookings }) {
 
       <p className="mt-2">Condition: {booking.condition}</p>
 
-      <p>
-        Bed Type:
-        <span className="ml-1 font-semibold">{booking.bedType}</span>
-      </p>
+      <p>Bed Type: {booking.bedType}</p>
 
       <p className="mt-2">
         Status:
@@ -69,6 +77,15 @@ function BookingCard({ booking, refreshBookings }) {
           Reject
         </button>
       </div>
+
+      {booking.status !== "PENDING" && (
+        <button
+          onClick={handleDelete}
+          className="mt-3 w-full bg-red-500 text-white py-2 rounded hover:bg-gray-500"
+        >
+          Delete Booking
+        </button>
+      )}
     </div>
   );
 }

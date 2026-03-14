@@ -22,15 +22,16 @@ function Login() {
 
       localStorage.setItem("token", token);
       localStorage.setItem("role", user.role);
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("name", user.name);
 
       if (user.role === "hospital") {
         navigate("/dashboard");
       } else {
         navigate("/hospitals");
       }
-    } catch (err) {
-      setError("Invalid email or password");
+    } catch (error) {
+      console.log(error.response?.data);
+      setError(error.response?.data?.message || "Login failed");
     }
   };
 

@@ -25,7 +25,7 @@ function Register() {
       navigate("/login");
     } catch (error) {
       setError("Registration fail , try another email");
-      console.log(error);
+      console.log(error.response.data);
     }
   };
 

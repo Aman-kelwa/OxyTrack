@@ -5,7 +5,7 @@ exports.createHospital = async (req, res) => {
   try {
     const hospital = await Hospital.create({
       ...req.body,
-      createdBy: req.user,
+      createdBy: req.user._id,
     });
 
     res.status(201).json({

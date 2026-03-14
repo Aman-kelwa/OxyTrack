@@ -19,32 +19,32 @@ exports.createBooking = async (req, res) => {
   }
 };
 
-// exports.getBooking = async (req, res) => {
-//   try {
-//     const bookings = await Booking.find()
-//       .populate("hospital")
-//       .populate("createdBy", "name email");
-//     res.json(bookings);
-//   } catch (error) {
-//     res.status(500).json({
-//       message: error.message,
-//     });
-//   }
-// };
 exports.getBooking = async (req, res) => {
   try {
-    let bookings;
+    let bookings = [];
 
+    // Citizen bookings
     if (req.user.role === "citizen") {
       bookings = await Booking.find({
         createdBy: req.user._id,
+      }).populate("hospital", "name city");
+    }
+
+    // Hospital bookings
+    if (req.user.role === "hospital") {
+      const hospital = await Hospital.findOne({
+        createdBy: req.user._id,
+      });
+
+      if (!hospital) {
+        return res.json([]);
+      }
+
+      bookings = await Booking.find({
+        hospital: hospital._id,
       })
-        .populate("hospital", "name city")
-        .populate("createdBy", "name email");
-    } else if (req.user.role === "hospital") {
-      bookings = await Booking.find()
-        .populate("hospital")
-        .populate("createdBy", "name email");
+        .populate("createdBy", "name email")
+        .populate("hospital", "name city");
     }
 
     res.json(bookings);
@@ -114,6 +114,30 @@ exports.updateBookingStatus = async (req, res) => {
     res.json({
       message: `Booking ${status}`,
       booking,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+exports.deleteBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const booking = await Booking.findById(id);
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    await Booking.findByIdAndDelete(id);
+
+    res.json({
+      message: "Booking deleted successfully",
     });
   } catch (error) {
     res.status(500).json({

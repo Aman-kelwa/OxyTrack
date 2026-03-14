@@ -6,7 +6,7 @@ function AddHospital() {
     name: "",
     city: "",
     address: "",
-    hospitalType: "Government",
+    hospitalType: "Private",
     totalICU: "",
     availableICU: "",
     totalOxygenBeds: "",
@@ -14,36 +14,28 @@ function AddHospital() {
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
     setForm({
       ...form,
-      [name]: value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-      console.log(form);
+    await axios.post("http://localhost:5000/api/hospital/create", form, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-      await axios.post("http://localhost:5000/api/hospital/create", form, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      alert("Hospital added");
-    } catch (error) {
-      alert("Error");
-    }
+    alert("Hospital added successfully");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pt-24 flex justify-center">
       <form
         onSubmit={handleSubmit}
         className="bg-white p-8 rounded-xl shadow w-96 space-y-4"
@@ -52,27 +44,29 @@ function AddHospital() {
 
         <input
           name="name"
-          placeholder="Name"
+          placeholder="Hospital Name"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
+
         <input
           name="city"
           placeholder="City"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
+
         <input
           name="address"
           placeholder="Address"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
 
         <select
           name="hospitalType"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         >
           <option>Government</option>
           <option>Private</option>
@@ -82,28 +76,30 @@ function AddHospital() {
 
         <input
           name="totalICU"
-          placeholder="Total ICU"
+          placeholder="Total ICU Beds"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
+
         <input
           name="availableICU"
-          placeholder="Available ICU"
+          placeholder="Available ICU Beds"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
 
         <input
           name="totalOxygenBeds"
           placeholder="Total Oxygen Beds"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
+
         <input
           name="availableOxygenBeds"
           placeholder="Available Oxygen Beds"
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          className="border p-2 w-full rounded"
         />
 
         <button className="bg-indigo-600 text-white w-full py-2 rounded">
