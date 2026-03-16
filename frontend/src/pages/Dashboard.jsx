@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BookingCard from "../components/BookingCard";
+import HospitalCard from "../components/HospitalCard";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
 
   const hospitalName = localStorage.getItem("name");
+  const token = localStorage.getItem("token");
 
   const fetchBookings = async () => {
-    const token = localStorage.getItem("token");
-
     const res = await axios.get("http://localhost:5000/api/booking", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -20,73 +22,69 @@ function Dashboard() {
     setBookings(res.data);
   };
 
+  const fetchHospitals = async () => {
+    const res = await axios.get("http://localhost:5000/api/hospital");
+
+    setHospitals(res.data);
+  };
+
   useEffect(() => {
     fetchBookings();
+    fetchHospitals();
   }, []);
-
-  // Stats
-  const total = bookings.length;
-  const pending = bookings.filter((b) => b.status === "PENDING").length;
-  const approved = bookings.filter((b) => b.status === "APPROVED").length;
-  const rejected = bookings.filter((b) => b.status === "REJECTED").length;
 
   return (
     <div className="min-h-screen bg-gray-100 pt-24 px-10">
-      {/* Animated Header */}
+      {/* Header */}
 
-      <motion.div
-        initial={{ opacity: 0, y: -40 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-10"
-      >
-        <h1 className="text-4xl font-bold text-indigo-700">
-          🏥 {hospitalName} Dashboard
-        </h1>
+      <div className="flex justify-between items-center mb-10">
+        <div>
+          <h1 className="text-4xl font-bold text-indigo-700">
+            🏥 {hospitalName} Dashboard
+          </h1>
 
-        <p className="text-gray-500 mt-1">Manage patient booking requests</p>
-      </motion.div>
-
-      {/* Statistics Cards */}
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="grid md:grid-cols-4 gap-6 mb-10"
-      >
-        <div className="bg-white p-6 rounded-xl shadow">
-          <p className="text-gray-500">Total</p>
-          <h2 className="text-2xl font-bold">{total}</h2>
+          <p className="text-gray-500">Manage hospitals and booking requests</p>
         </div>
 
-        <div className="bg-yellow-100 p-6 rounded-xl shadow">
-          <p className="text-yellow-700">Pending</p>
-          <h2 className="text-2xl font-bold">{pending}</h2>
-        </div>
+        <Link
+          to="/add-hospital"
+          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-500"
+        >
+          Add Hospital
+        </Link>
+      </div>
 
-        <div className="bg-green-100 p-6 rounded-xl shadow">
-          <p className="text-green-700">Approved</p>
-          <h2 className="text-2xl font-bold">{approved}</h2>
-        </div>
+      {/* Hospital List */}
 
-        <div className="bg-red-100 p-6 rounded-xl shadow">
-          <p className="text-red-700">Rejected</p>
-          <h2 className="text-2xl font-bold">{rejected}</h2>
-        </div>
-      </motion.div>
+      {/* <h2 className="text-2xl font-semibold mb-6">Your Hospitals</h2>
 
-      {/* Booking Cards */}
+      {hospitals.length === 0 ? (
+        <p>No hospitals added</p>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {hospitals.map((hospital) => (
+            <HospitalCard
+              key={hospital._id}
+              hospital={hospital}
+              refreshHospitals={fetchHospitals}
+            />
+          ))}
+        </div>
+      )} */}
+
+      {/* Booking Requests */}
+
+      <h2 className="text-2xl font-semibold mb-6">Booking Requests</h2>
 
       {bookings.length === 0 ? (
-        <p>No bookings yet</p>
+        <p>No booking requests</p>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookings.map((booking, index) => (
+          {bookings.map((booking) => (
             <motion.div
               key={booking._id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
             >
               <BookingCard booking={booking} refreshBookings={fetchBookings} />
             </motion.div>

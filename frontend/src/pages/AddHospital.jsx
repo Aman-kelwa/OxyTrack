@@ -23,15 +23,21 @@ function AddHospital() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    await axios.post("http://localhost:5000/api/hospital/create", form, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      await axios.post("http://localhost:5000/api/hospital/create", form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    alert("Hospital added successfully");
+      alert("Hospital added successfully");
+
+      navigate("/dashboard");
+    } catch (error) {
+      alert("Error adding hospital");
+    }
   };
 
   return (

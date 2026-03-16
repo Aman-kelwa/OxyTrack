@@ -32,16 +32,15 @@ exports.getBooking = async (req, res) => {
 
     // Hospital bookings
     if (req.user.role === "hospital") {
-      const hospital = await Hospital.findOne({
+      // get ALL hospitals created by this user
+      const hospitals = await Hospital.find({
         createdBy: req.user._id,
       });
 
-      if (!hospital) {
-        return res.json([]);
-      }
+      const hospitalIds = hospitals.map((h) => h._id);
 
       bookings = await Booking.find({
-        hospital: hospital._id,
+        hospital: { $in: hospitalIds },
       })
         .populate("createdBy", "name email")
         .populate("hospital", "name city");
@@ -74,7 +73,7 @@ exports.updateBookingStatus = async (req, res) => {
       });
     }
 
-    // NEW CHECK
+    // prevent double approval/rejection
     if (booking.status !== "PENDING") {
       return res.status(400).json({
         message: `Booking already ${booking.status}`,
@@ -83,6 +82,7 @@ exports.updateBookingStatus = async (req, res) => {
 
     const hospital = await Hospital.findById(booking.hospital);
 
+    // BED MANAGEMENT
     if (status === "APPROVED") {
       if (booking.bedType === "ICU") {
         if (hospital.availableICU <= 0) {
@@ -110,6 +110,10 @@ exports.updateBookingStatus = async (req, res) => {
     booking.status = status;
 
     await booking.save();
+
+    // REAL-TIME EVENT
+    const io = req.app.get("io");
+    io.emit("bookingUpdated", booking);
 
     res.json({
       message: `Booking ${status}`,

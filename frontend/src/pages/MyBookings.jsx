@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:5000");
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -18,6 +21,17 @@ function MyBookings() {
 
   useEffect(() => {
     fetchBookings();
+
+    // listen for booking updates
+    socket.on("bookingUpdated", (updatedBooking) => {
+      setBookings((prev) =>
+        prev.map((b) => (b._id === updatedBooking._id ? updatedBooking : b)),
+      );
+    });
+
+    return () => {
+      socket.off("bookingUpdated");
+    };
   }, []);
 
   const handleDelete = async (id) => {
