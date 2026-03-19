@@ -9,6 +9,7 @@ import Hospitals from "./pages/Hospitals";
 import Dashboard from "./pages/Dashboard";
 import AddHospital from "./pages/AddHospital";
 import MyBookings from "./pages/MyBookings";
+import UpdateHospital from "./pages/UpdateHospital";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Route path="/add-hospital" element={<AddHospital />} />
 
         <Route path="/my-bookings" element={<MyBookings />} />
+
+        <Route path="/update-hospital/:id" element={<UpdateHospital />} />
       </Routes>
     </Router>
   );

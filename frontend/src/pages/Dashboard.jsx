@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BookingCard from "../components/BookingCard";
-import HospitalCard from "../components/HospitalCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
   const [hospitals, setHospitals] = useState([]);
+
+  const navigate = useNavigate();
 
   const hospitalName = localStorage.getItem("name");
   const token = localStorage.getItem("token");
@@ -54,25 +55,46 @@ function Dashboard() {
         </Link>
       </div>
 
-      {/* Hospital List */}
+      {/* Hospitals Section */}
 
-      {/* <h2 className="text-2xl font-semibold mb-6">Your Hospitals</h2>
+      <h2 className="text-2xl font-semibold mb-6">Your Hospitals</h2>
 
       {hospitals.length === 0 ? (
-        <p>No hospitals added</p>
+        <p>No hospitals found</p>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {hospitals.map((hospital) => (
-            <HospitalCard
+            <div
               key={hospital._id}
-              hospital={hospital}
-              refreshHospitals={fetchHospitals}
-            />
+              className="bg-white p-6 rounded-xl shadow border"
+            >
+              <h2 className="text-lg font-bold">{hospital.name}</h2>
+
+              <p className="text-sm text-gray-500">{hospital.city}</p>
+
+              <p className="mt-2">
+                ICU: {hospital.availableICU} / {hospital.totalICU}
+              </p>
+
+              <p>
+                Oxygen: {hospital.availableOxygenBeds} /{" "}
+                {hospital.totalOxygenBeds}
+              </p>
+
+              {/* ✅ Correct Update Button */}
+
+              <button
+                onClick={() => navigate(`/update-hospital/${hospital._id}`)}
+                className="mt-4 w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-500"
+              >
+                Update Beds
+              </button>
+            </div>
           ))}
         </div>
-      )} */}
+      )}
 
-      {/* Booking Requests */}
+      {/* Booking Section */}
 
       <h2 className="text-2xl font-semibold mb-6">Booking Requests</h2>
 

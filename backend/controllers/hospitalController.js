@@ -45,7 +45,8 @@ exports.updateBeds = async (req, res) => {
       });
     }
 
-    const { availableICU, availableOxygenBeds } = req.body;
+    const { availableICU, availableOxygenBeds, totalICU, totalOxygenBeds } =
+      req.body;
 
     if (availableICU > hospital.totalICU) {
       return res.status(400).json({
@@ -63,6 +64,9 @@ exports.updateBeds = async (req, res) => {
     hospital.availableICU = availableICU ?? hospital.availableICU;
     hospital.availableOxygenBeds =
       availableOxygenBeds ?? hospital.availableOxygenBeds;
+
+    hospital.totalICU = totalICU ?? hospital.totalICU;
+    hospital.totalOxygenBeds = totalOxygenBeds ?? hospital.totalOxygenBeds;
 
     await hospital.save();
 

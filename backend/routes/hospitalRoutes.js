@@ -18,7 +18,7 @@ router.post("/create", protect, createHospital);
 router.get("/", getHospitals);
 
 // update bed availability
-router.patch("/update/:id", protect, updateBeds);
+router.put("/update/:id", protect, updateBeds);
 
 //delete hospital
 router.delete("/delete/:id", protect, deleteHospital);
