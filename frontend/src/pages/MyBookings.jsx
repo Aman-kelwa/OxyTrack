@@ -87,14 +87,14 @@ function MyBookings() {
                 </span>
               </p>
 
-              {booking.status !== "PENDING" && (
+              {/* {booking.status !== "PENDING" && (
                 <button
                   onClick={() => handleDelete(booking._id)}
                   className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-400"
                 >
                   Delete Booking
                 </button>
-              )}
+              )} */}
             </div>
           ))}
         </div>

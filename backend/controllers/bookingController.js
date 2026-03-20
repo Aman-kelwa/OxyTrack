@@ -125,7 +125,7 @@ exports.updateBookingStatus = async (req, res) => {
     });
   }
 };
-
+//delete bookings
 exports.deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -138,11 +138,44 @@ exports.deleteBooking = async (req, res) => {
       });
     }
 
-    await Booking.findByIdAndDelete(id);
+    // 👤 Citizen delete → soft delete
+    if (req.user.role === "citizen") {
+      booking.isDeletedByUser = true;
+      await booking.save();
 
-    res.json({
-      message: "Booking deleted successfully",
-    });
+      return res.json({
+        message: "Booking removed from your view",
+      });
+    }
+
+    // 👨‍⚕️ Hospital delete → real delete + restore beds
+    if (req.user.role === "hospital") {
+      if (booking.status === "APPROVED") {
+        const hospital = await Hospital.findById(booking.hospital);
+
+        if (
+          booking.bedType === "ICU" &&
+          hospital.availableICU < hospital.totalICU
+        ) {
+          hospital.availableICU += 1;
+        }
+
+        if (
+          booking.bedType === "OXYGEN" &&
+          hospital.availableOxygenBeds < hospital.totalOxygenBeds
+        ) {
+          hospital.availableOxygenBeds += 1;
+        }
+
+        await hospital.save();
+      }
+
+      await Booking.findByIdAndDelete(id);
+
+      return res.json({
+        message: "Booking deleted by hospital",
+      });
+    }
   } catch (error) {
     res.status(500).json({
       message: error.message,
