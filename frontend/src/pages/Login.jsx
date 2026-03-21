@@ -30,7 +30,7 @@ function Login() {
         navigate("/hospitals");
       }
     } catch (error) {
-      console.log(error.response?.data);
+      console.log("errorrrr", error.response?.data);
       setError(error.response?.data?.message || "Login failed");
     }
   };

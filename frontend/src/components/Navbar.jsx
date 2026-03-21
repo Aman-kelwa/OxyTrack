@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import MyHospitals from "../pages/MyHospitals";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -44,9 +45,15 @@ function Navbar() {
           )}
 
           {role === "hospital" && (
-            <Link to="/dashboard" className="hover:text-cyan-200">
-              Dashboard
-            </Link>
+            <>
+              <Link to="/dashboard" className="hover:text-cyan-200">
+                Dashboard
+              </Link>
+
+              <Link to="/my-hospitals" className="hover:text-cyan-200">
+                Your Hospitals
+              </Link>
+            </>
           )}
         </div>
 

@@ -21,7 +21,6 @@ const hospitalSchema = new mongoose.Schema(
       type: String,
       enum: ["Government", "Private", "NGO", "Emergency"],
       required: true,
-      default: "Private",
     },
 
     totalICU: {
