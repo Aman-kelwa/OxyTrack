@@ -64,7 +64,7 @@ function Navbar() {
             <>
               <Link
                 to="/login"
-                className="px-4 py-2 border border-white rounded text-white"
+                className="px-4 py-2 border border-white rounded cursor-pointer text-white"
               >
                 Login
               </Link>
@@ -81,7 +81,7 @@ function Navbar() {
           {token && (
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-white text-indigo-600 rounded"
+              className="px-4 py-2 cursor-pointer hover:text-indigo-800  bg-white text-indigo-600 rounded"
             >
               Logout
             </button>

@@ -11,6 +11,7 @@ import AddHospital from "./pages/AddHospital";
 import MyBookings from "./pages/MyBookings";
 import UpdateHospital from "./pages/UpdateHospital";
 import MyHospitals from "./pages/MyHospitals";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -24,17 +25,45 @@ function App() {
 
         <Route path="/register" element={<Register />} />
 
-        <Route path="/hospitals" element={<Hospitals />} />
+        <Route
+          path="/hospitals"
+          element={
+            <ProtectedRoute>
+              <Hospitals />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute role="hospital">
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/add-hospital" element={<AddHospital />} />
 
-        <Route path="/my-bookings" element={<MyBookings />} />
+        <Route
+          path="/my-bookings"
+          element={
+            <ProtectedRoute role="citizen">
+              <MyBookings />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/update-hospital/:id" element={<UpdateHospital />} />
 
-        <Route path="/my-hospitals" element={<MyHospitals />} />
+        <Route
+          path="/my-hospitals"
+          element={
+            <ProtectedRoute role="hospital">
+              <MyHospitals />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
