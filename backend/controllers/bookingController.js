@@ -1,5 +1,6 @@
 const Booking = require("../models/Booking");
 const Hospital = require("../models/Hospital");
+const { Server } = require("socket.io");
 
 exports.createBooking = async (req, res) => {
   try {
@@ -7,6 +8,9 @@ exports.createBooking = async (req, res) => {
       ...req.body,
       createdBy: req.user,
     });
+
+    const io = req.app.get("io");
+    io.emit("new-booking", booking);
 
     res.status(201).json({
       message: "Booking request created",

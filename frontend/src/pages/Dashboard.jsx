@@ -1,12 +1,28 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react";
 import axios from "axios";
 import BookingCard from "../components/BookingCard";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:5000");
 
 function Dashboard() {
   const [bookings, setBookings] = useState([]);
   const [hospitals, setHospitals] = useState([]);
+
+  useEffect(() => {
+    socket.on("new-booking", (data) => {
+      console.log("New booking received:", data);
+
+      setBookings((prev) => [...prev, data]);
+    });
+
+    return () => {
+      socket.off("new-booking");
+    };
+  }, []);
 
   const hospitalName = localStorage.getItem("name");
   const token = localStorage.getItem("token");

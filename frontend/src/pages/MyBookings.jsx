@@ -22,7 +22,6 @@ function MyBookings() {
   useEffect(() => {
     fetchBookings();
 
-    // listen for booking updates
     socket.on("bookingUpdated", (updatedBooking) => {
       setBookings((prev) =>
         prev.map((b) => (b._id === updatedBooking._id ? updatedBooking : b)),
@@ -86,15 +85,6 @@ function MyBookings() {
                   {booking.status}
                 </span>
               </p>
-
-              {/* {booking.status !== "PENDING" && (
-                <button
-                  onClick={() => handleDelete(booking._id)}
-                  className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-400"
-                >
-                  Delete Booking
-                </button>
-              )} */}
             </div>
           ))}
         </div>
