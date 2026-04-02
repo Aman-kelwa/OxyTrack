@@ -6,7 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Hospitals from "./pages/Hospitals";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/HospitalDashboard";
 import AddHospital from "./pages/AddHospital";
 import MyBookings from "./pages/MyBookings";
 import UpdateHospital from "./pages/UpdateHospital";
