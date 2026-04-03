@@ -52,11 +52,23 @@ function MyBookings() {
 
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this booking?")) return;
-    const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/api/booking/delete/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    fetchBookings();
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await axios.delete(
+        `http://localhost:5000/api/booking/delete/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      console.log("Delete success:", res.data);
+
+      fetchBookings();
+    } catch (err) {
+      console.error("Delete failed:", err.response?.data || err.message);
+    }
   };
 
   const statusConfig = {

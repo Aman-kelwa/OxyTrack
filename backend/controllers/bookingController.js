@@ -142,15 +142,11 @@ exports.deleteBooking = async (req, res) => {
       });
     }
 
-    // 👤 Citizen delete → soft delete
-    if (req.user.role === "citizen") {
-      booking.isDeletedByUser = true;
-      await booking.save();
+    await Booking.findByIdAndDelete(id);
 
-      return res.json({
-        message: "Booking removed from your view",
-      });
-    }
+    return res.json({
+      message: "Booking deleted successfully",
+    });
 
     // 👨‍⚕️ Hospital delete → real delete + restore beds
     if (req.user.role === "hospital") {

@@ -111,8 +111,8 @@ function Navbar() {
         .nav-link {
           position: relative;
           text-decoration: none;
-          color: #5e7b78;
-          font-size: 0.9rem;
+          color: #000;
+          font-size: .9rem;
           font-weight: 500;
           padding: 7px 14px;
           border-radius: 10px;
@@ -229,59 +229,75 @@ function Navbar() {
         }
 
         /* ── Mobile Menu ── */
-        .nav-mobile {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(240,253,249,0.97);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          z-index: 998;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          padding: 80px 24px 40px;
-        }
+ .nav-mobile {
+  position: fixed;
+  inset: 0;
+  background: rgba(240,253,249,0.98);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  z-index: 998;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;   /* 🔥 FIX */
+  
+  padding: 100px 24px 40px;
+}
         .nav-mobile-link {
-          font-family: 'Syne', sans-serif;
-          font-size: 1.6rem;
-          font-weight: 700;
-          color: #134e4a;
-          text-decoration: none;
-          padding: 12px 0;
-          width: 100%;
-          text-align: center;
-          border-bottom: 1px solid rgba(13,148,136,0.1);
-          transition: color 0.15s;
-        }
+  font-family: 'Syne', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #134e4a;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 260px;          /* 🔥 FIXED WIDTH */
+  padding: 14px;
+
+  border-radius: 12px;
+  background: transparent;
+
+  transition: all 0.2s ease;
+}
         .nav-mobile-link:hover { color: #0d9488; }
-        .nav-mobile-actions {
-          display: flex;
-          gap: 12px;
-          margin-top: 24px;
-          width: 100%;
-          justify-content: center;
-        }
-        .nav-mobile-close {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          width: 42px;
-          height: 42px;
-          border-radius: 12px;
-          background: rgba(13,148,136,0.08);
-          border: 1px solid rgba(13,148,136,0.15);
-          color: #0d9488;
-          font-size: 1.1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-        }
+       .nav-mobile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 40px;
+  align-items: center;   /* 🔥 center everything */
+}
+
+.nav-mobile-actions a,
+.nav-mobile-actions button {
+  width: 260px;         /* 🔥 SAME WIDTH AS HOME */
+  justify-content: center;
+}
+      .nav-mobile-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+
+  width: 40px;
+  height: 40px;
+
+  background: transparent;   /* 🔥 remove white */
+  border: none;              /* 🔥 remove border */
+
+  color: #0d9488;
+  font-size: 1.6rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  z-index: 9999;
+}
 
         @media (max-width: 768px) {
           .nav-links, .nav-actions { display: none; }
@@ -375,7 +391,7 @@ function Navbar() {
         {menuOpen && (
           <motion.div
             className="nav-mobile"
-            initial={{ opacity: 0, y: -30 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
@@ -383,14 +399,12 @@ function Navbar() {
             <button
               className="nav-mobile-close"
               onClick={() => setMenuOpen(false)}
-            >
-              ✕
-            </button>
+            ></button>
 
             {navLinks.map((link, i) => (
               <motion.div
                 key={link.to}
-                style={{ width: "100%" }}
+                style={{ display: "flex", justifyContent: "center" }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.07 }}
