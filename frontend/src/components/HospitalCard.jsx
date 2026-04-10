@@ -45,7 +45,7 @@ function HospitalCard({ hospital, refreshHospitals }) {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5000/api/hospital/delete/${hospital._id}`,
+        `https://oxytrack.onrender.com/api/hospital/delete/${hospital._id}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       refreshHospitals();

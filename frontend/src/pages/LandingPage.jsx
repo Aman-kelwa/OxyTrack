@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 import Footer from "../components/Footer";
 
-/* ─── Reusable animated section wrapper ─── */
 function FadeUp({ children, delay = 0 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -19,7 +18,6 @@ function FadeUp({ children, delay = 0 }) {
   );
 }
 
-/* ─── Feature Card ─── */
 function Feature({ icon, title, desc, delay }) {
   return (
     <FadeUp delay={delay}>
@@ -35,7 +33,6 @@ function Feature({ icon, title, desc, delay }) {
   );
 }
 
-/* ─── Stat Card ─── */
 function StatCard({ value, label, icon }) {
   return (
     <div className="lp-stat-card">

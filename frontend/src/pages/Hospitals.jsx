@@ -3,7 +3,6 @@ import axios from "axios";
 import HospitalCard from "../components/HospitalCard";
 import { motion, AnimatePresence } from "framer-motion";
 
-/* ─────────────────────── Skeleton Card ─────────────────────── */
 function HospitalCardSkeleton() {
   return (
     <div className="hosp-skeleton-card">
@@ -22,7 +21,6 @@ function HospitalCardSkeleton() {
   );
 }
 
-/* ─────────────────────── Stat Pill ─────────────────────── */
 function StatPill({ icon, label, value, loading }) {
   return (
     <div className="stat-pill">
@@ -39,7 +37,6 @@ function StatPill({ icon, label, value, loading }) {
   );
 }
 
-/* ─────────────────────── Main Component ─────────────────────── */
 function Hospitals() {
   const [hospitals, setHospitals] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +48,7 @@ function Hospitals() {
 
   const fetchHospitals = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/hospital");
+      const res = await axios.get("https://oxytrack.onrender.com/api/hospital");
       setHospitals(res.data);
     } finally {
       setLoading(false);

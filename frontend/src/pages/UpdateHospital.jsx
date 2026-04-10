@@ -17,7 +17,7 @@ function UpdateHospital() {
 
   // Fetch hospital data
   const fetchHospital = async () => {
-    const res = await axios.get("http://localhost:5000/api/hospital");
+    const res = await axios.get("https://oxytrack.onrender.com/api/hospital");
 
     const found = res.data.find((h) => h._id === id);
 
@@ -51,11 +51,15 @@ function UpdateHospital() {
 
     const token = localStorage.getItem("token");
 
-    await axios.put(`http://localhost:5000/api/hospital/update/${id}`, form, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    await axios.put(
+      `https://oxytrack.onrender.com/api/hospital/update/${id}`,
+      form,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     alert("Beds updated successfully");
     console.log(err);

@@ -9,7 +9,7 @@ function MyHospitals() {
   const token = localStorage.getItem("token");
 
   const fetchHospitals = async () => {
-    const res = await axios.get("http://localhost:5000/api/hospital", {
+    const res = await axios.get("https://oxytrack.onrender.com/api/hospital", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -24,11 +24,14 @@ function MyHospitals() {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this hospital?")) return;
 
-    await axios.delete(`http://localhost:5000/api/hospital/delete/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    await axios.delete(
+      `https://oxytrack.onrender.com/api/hospital/delete/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
 
     fetchHospitals();
   };

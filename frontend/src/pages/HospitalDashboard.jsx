@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://oxytrack.onrender.com");
 
 /* ─────────────────────────── Skeleton Components ─────────────────────────── */
 
@@ -115,7 +115,7 @@ function Dashboard() {
   /* Fetch */
   const fetchBookings = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/booking", {
+      const res = await axios.get("https://oxytrack.onrender.com/api/booking", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(res.data);

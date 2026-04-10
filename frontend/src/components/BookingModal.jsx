@@ -15,7 +15,7 @@ function BookingModal({ hospital, closeModal }) {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/booking/create",
+        "https://oxytrack.onrender.com/api/booking/create",
         {
           patientName,
           age,

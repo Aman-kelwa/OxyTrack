@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { motion, AnimatePresence } from "framer-motion";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://oxytrack.onrender.com");
 
 /* ─── Skeleton Card ─── */
 function BookingSkeleton() {
@@ -29,7 +29,7 @@ function MyBookings() {
 
   const fetchBookings = async () => {
     const token = localStorage.getItem("token");
-    const res = await axios.get("http://localhost:5000/api/booking", {
+    const res = await axios.get("https://oxytrack.onrender.com/api/booking", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setBookings(res.data);
@@ -57,7 +57,7 @@ function MyBookings() {
       const token = localStorage.getItem("token");
 
       const res = await axios.delete(
-        `http://localhost:5000/api/booking/delete/${id}`,
+        `https://oxytrack.onrender.com/api/booking/delete/${id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

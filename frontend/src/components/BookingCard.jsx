@@ -36,7 +36,7 @@ function BookingCard({ booking, refreshBookings }) {
     try {
       const token = localStorage.getItem("token");
       await axios.patch(
-        `http://localhost:5000/api/booking/update/${booking._id}`,
+        `https://oxytrack.onrender.com/api/booking/update/${booking._id}`,
         { status },
         { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -54,7 +54,7 @@ function BookingCard({ booking, refreshBookings }) {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5000/api/booking/delete/${booking._id}`,
+        `https://oxytrack.onrender.com/api/booking/delete/${booking._id}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       refreshBookings();
