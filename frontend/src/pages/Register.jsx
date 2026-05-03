@@ -397,7 +397,9 @@ function Register() {
             <form onSubmit={handleRegister}>
               {/* Name */}
               <div className="auth-field">
-                <label className="auth-label">Full Name</label>
+                <label className="auth-label">
+                  {role === "hospital" ? "Hospital Name" : "Full Name"}
+                </label>
                 <div
                   className={`auth-input-wrap ${focusedField === "name" ? "focused" : ""}`}
                 >
@@ -405,7 +407,9 @@ function Register() {
                   <input
                     type="text"
                     className="auth-input"
-                    placeholder="Aman"
+                    placeholder={
+                      role === "hospital" ? "Enter hospital name" : "Aman"
+                    }
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
