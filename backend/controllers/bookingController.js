@@ -12,19 +12,21 @@ exports.createBooking = async (req, res) => {
       });
     }
 
-    const bedType = req.body.bedType.toUpperCase();
+    const availableICU = Number(hospital.availableICU);
+    const availableOxygenBeds = Number(hospital.availableOxygenBeds);
 
-    if (bedType === "ICU" && hospital.availableICU <= 0) {
+    if (req.body.bedType === "ICU" && availableICU <= 0) {
       return res.status(400).json({
         message: "ICU beds not available",
       });
     }
 
-    if (bedType === "OXYGEN" && hospital.availableOxygenBeds <= 0) {
+    if (req.body.bedType === "OXYGEN" && availableOxygenBeds <= 0) {
       return res.status(400).json({
         message: "Oxygen beds not available",
       });
     }
+
     // Create booking
     const booking = await Booking.create({
       ...req.body,
@@ -161,12 +163,22 @@ exports.deleteBooking = async (req, res) => {
 
     const booking = await Booking.findById(id);
 
+    if (!booking) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
     console.log("Booking:", booking);
 
     console.log("User Role:", req.user.role);
 
-    if (req.user.role === "hospital") {
-      console.log("Hospital role matched");
+    // Increase beds only if:
+    // 1. hospital deletes
+    // 2. booking was APPROVED
+
+    if (req.user.role === "hospital" && booking.status === "APPROVED") {
+      console.log("Approved booking delete");
 
       const hospital = await Hospital.findById(booking.hospital);
 
