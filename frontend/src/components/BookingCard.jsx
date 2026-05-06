@@ -43,6 +43,15 @@ function BookingCard({ booking, refreshBookings }) {
       refreshBookings();
     } catch (error) {
       console.log(error);
+      console.log("Full Error:", error);
+
+      console.log("Message:", error.message);
+
+      console.log("Response:", error.response);
+
+      console.log("Request:", error.request);
+
+      alert(error.message || "Action failed");
       console.log(error.response?.data);
 
       alert(error.response?.data?.message || "Action failed. Try again.");

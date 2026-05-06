@@ -18,8 +18,7 @@ const app = express();
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://oxy-track.vercel.app"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   }),
 );
 
@@ -37,12 +36,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["https://oxy-track.vercel.app", "http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://oxy-track.vercel.app"],
     methods: ["GET", "POST"],
-    credentials: true,
   },
 });
-
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 });

@@ -6,10 +6,8 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { io } from "socket.io-client";
 
-const socket = io("https://oxytrack.onrender.com", {
-  transports: ["websocket"],
-  withCredentials: true,
-});
+const socket = io("https://oxytrack.onrender.com");
+
 /* ─────────────────────────── Skeleton Components ─────────────────────────── */
 
 function StatCardSkeleton() {
