@@ -4,11 +4,34 @@ const { Server } = require("socket.io");
 
 exports.createBooking = async (req, res) => {
   try {
+    const hospital = await Hospital.findById(req.body.hospital);
+
+    if (!hospital) {
+      return res.status(404).json({
+        message: "Hospital not found",
+      });
+    }
+
+    const bedType = req.body.bedType.toUpperCase();
+
+    if (bedType === "ICU" && hospital.availableICU <= 0) {
+      return res.status(400).json({
+        message: "ICU beds not available",
+      });
+    }
+
+    if (bedType === "OXYGEN" && hospital.availableOxygenBeds <= 0) {
+      return res.status(400).json({
+        message: "Oxygen beds not available",
+      });
+    }
+    // Create booking
     const booking = await Booking.create({
       ...req.body,
       createdBy: req.user,
     });
 
+    // Socket event
     const io = req.app.get("io");
     io.emit("new-booking", booking);
 
