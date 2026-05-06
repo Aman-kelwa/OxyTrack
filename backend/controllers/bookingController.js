@@ -132,51 +132,48 @@ exports.updateBookingStatus = async (req, res) => {
 //delete bookings
 exports.deleteBooking = async (req, res) => {
   try {
+    console.log("Delete API called");
+
     const { id } = req.params;
 
     const booking = await Booking.findById(id);
 
-    if (!booking) {
-      return res.status(404).json({
-        message: "Booking not found",
-      });
+    console.log("Booking:", booking);
+
+    console.log("User Role:", req.user.role);
+
+    if (req.user.role === "hospital") {
+      console.log("Hospital role matched");
+
+      const hospital = await Hospital.findById(booking.hospital);
+
+      console.log("Hospital Found:", hospital);
+
+      if (booking.bedType === "OXYGEN") {
+        hospital.availableOxygenBeds += 1;
+        console.log("Oxygen bed increased");
+      }
+
+      if (booking.bedType === "ICU") {
+        hospital.availableICU += 1;
+        console.log("ICU bed increased");
+      }
+
+      await hospital.save();
+
+      console.log("Hospital saved");
     }
 
     await Booking.findByIdAndDelete(id);
 
+    console.log("Booking deleted");
+
     return res.json({
       message: "Booking deleted successfully",
     });
-
-    // 👨‍⚕️ Hospital delete → real delete + restore beds
-    if (req.user.role === "hospital") {
-      if (booking.status === "APPROVED") {
-        const hospital = await Hospital.findById(booking.hospital);
-
-        if (
-          booking.bedType === "ICU" &&
-          hospital.availableICU < hospital.totalICU
-        ) {
-          hospital.availableICU += 1;
-        }
-
-        if (
-          booking.bedType === "OXYGEN" &&
-          hospital.availableOxygenBeds < hospital.totalOxygenBeds
-        ) {
-          hospital.availableOxygenBeds += 1;
-        }
-
-        await hospital.save();
-      }
-
-      await Booking.findByIdAndDelete(id);
-
-      return res.json({
-        message: "Booking deleted by hospital",
-      });
-    }
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({
       message: error.message,
     });

@@ -19,7 +19,7 @@ const hospitalSchema = new mongoose.Schema(
 
     hospitalType: {
       type: String,
-      enum: ["Government", "Private", "NGO", "Emergency"],
+      enum: ["Private", "NGO", "Government", "Emergency"],
       required: true,
     },
 

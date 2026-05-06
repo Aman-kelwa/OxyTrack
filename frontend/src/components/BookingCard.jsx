@@ -41,8 +41,11 @@ function BookingCard({ booking, refreshBookings }) {
         { headers: { Authorization: `Bearer ${token}` } },
       );
       refreshBookings();
-    } catch {
-      alert("Action failed. Try again.");
+    } catch (error) {
+      console.log(error);
+      console.log(error.response?.data);
+
+      alert(error.response?.data?.message || "Action failed. Try again.");
     } finally {
       setActing(false);
     }
