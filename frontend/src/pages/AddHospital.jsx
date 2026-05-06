@@ -39,11 +39,13 @@ function AddHospital() {
       // Clear form after submit
       setForm({
         name: "",
-        location: "",
-        availableICU: "",
-        availableOxygenBeds: "",
+        city: "",
+        address: "",
+        hospitalType: "Private",
         totalICU: "",
+        availableICU: "",
         totalOxygenBeds: "",
+        availableOxygenBeds: "",
       });
 
       alert("Hospital created successfully");
