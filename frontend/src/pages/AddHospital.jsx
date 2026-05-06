@@ -36,11 +36,19 @@ function AddHospital() {
         },
       );
 
-      alert("Hospital added successfully");
+      // Clear form after submit
+      setForm({
+        name: "",
+        location: "",
+        availableICU: "",
+        availableOxygenBeds: "",
+        totalICU: "",
+        totalOxygenBeds: "",
+      });
 
-      navigate("/dashboard");
+      alert("Hospital created successfully");
     } catch (error) {
-      alert("Error adding hospital");
+      alert(error.response?.data?.message || "Something went wrong");
     }
   };
 
