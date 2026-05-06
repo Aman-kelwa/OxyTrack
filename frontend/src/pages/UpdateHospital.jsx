@@ -62,8 +62,6 @@ function UpdateHospital() {
     );
 
     alert("Beds updated successfully");
-    console.log(err);
-
     navigate("/dashboard");
   };
 

@@ -1,17 +1,20 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function AddHospital() {
   const [form, setForm] = useState({
     name: "",
     city: "",
     address: "",
-    hospitalType: "Private",
+    hospitalType: "",
     totalICU: "",
     availableICU: "",
     totalOxygenBeds: "",
     availableOxygenBeds: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({
@@ -36,21 +39,11 @@ function AddHospital() {
         },
       );
 
-      // Clear form after submit
-      setForm({
-        name: "",
-        city: "",
-        address: "",
-        hospitalType: "Private",
-        totalICU: "",
-        availableICU: "",
-        totalOxygenBeds: "",
-        availableOxygenBeds: "",
-      });
+      alert("Hospital added successfully");
 
-      alert("Hospital created successfully");
+      navigate("/dashboard");
     } catch (error) {
-      alert(error.response?.data?.message || "Something went wrong");
+      alert("Error adding hospital");
     }
   };
 
