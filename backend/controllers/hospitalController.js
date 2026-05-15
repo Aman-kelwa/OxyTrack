@@ -19,12 +19,10 @@ exports.createHospital = async (req, res) => {
   }
 };
 
-// GET ALL HOSPITALS
+// GET ALL HOSPITALS for citizens
 exports.getHospitals = async (req, res) => {
   try {
-    const hospitals = await Hospital.find({
-      createdBy: req.user.id,
-    }).populate("createdBy", "name email");
+    const hospitals = await Hospital.find().populate("createdBy", "name email");
 
     res.json(hospitals);
   } catch (error) {
@@ -34,6 +32,20 @@ exports.getHospitals = async (req, res) => {
   }
 };
 
+//get hospitals for hospital login
+exports.getMyHospitals = async (req, res) => {
+  try {
+    const hospitals = await Hospital.find({
+      createdBy: req.user.id,
+    });
+
+    res.json(hospitals);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 // UPDATE BED AVAILABILITY
 exports.updateBeds = async (req, res) => {
   try {

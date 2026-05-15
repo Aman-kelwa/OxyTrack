@@ -9,11 +9,14 @@ function MyHospitals() {
   const token = localStorage.getItem("token");
 
   const fetchHospitals = async () => {
-    const res = await axios.get("https://oxytrack.onrender.com/api/hospital", {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const res = await axios.get(
+      "https://oxytrack.onrender.com/api/hospital/my-hospitals",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     setHospitals(res.data);
   };
 

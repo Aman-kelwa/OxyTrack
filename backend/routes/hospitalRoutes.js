@@ -5,6 +5,7 @@ const router = express.Router();
 const {
   createHospital,
   getHospitals,
+  getMyHospitals,
   updateBeds,
   deleteHospital,
 } = require("../controllers/hospitalController");
@@ -15,7 +16,10 @@ const protect = require("../middleware/authMiddleware");
 router.post("/create", protect, createHospital);
 
 // get all hospitals
-router.get("/", protect, getHospitals);
+router.get("/", getHospitals);
+
+//get hospitals for hospital login
+router.get("/my-hospitals", protect, getMyHospitals);
 
 // update bed availability
 router.put("/update/:id", protect, updateBeds);
