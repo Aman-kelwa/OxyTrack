@@ -22,7 +22,9 @@ exports.createHospital = async (req, res) => {
 // GET ALL HOSPITALS
 exports.getHospitals = async (req, res) => {
   try {
-    const hospitals = await Hospital.find().populate("createdBy", "name email");
+    const hospitals = await Hospital.find({
+      createdBy: req.user.id,
+    }).populate("createdBy", "name email");
 
     res.json(hospitals);
   } catch (error) {

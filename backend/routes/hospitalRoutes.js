@@ -15,7 +15,7 @@ const protect = require("../middleware/authMiddleware");
 router.post("/create", protect, createHospital);
 
 // get all hospitals
-router.get("/", getHospitals);
+router.get("/", protect, getHospitals);
 
 // update bed availability
 router.put("/update/:id", protect, updateBeds);

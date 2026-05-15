@@ -386,14 +386,14 @@ function HospitalCard({ hospital, refreshHospitals }) {
               Book Bed
             </motion.button>
 
-            <motion.button
+            {/* <motion.button
               className="hcard-btn-delete"
               onClick={handleDelete}
               disabled={deleting}
               whileTap={{ scale: 0.96 }}
             >
               {deleting ? "…" : "🗑"}
-            </motion.button>
+            </motion.button> */}
           </div>
         </div>
       </motion.div>
