@@ -7,6 +7,7 @@ function BookingModal({ hospital, closeModal }) {
   const [age, setAge] = useState("");
   const [condition, setCondition] = useState("");
   const [bedType, setBedType] = useState("ICU");
+  const [ageError, setAgeError] = useState("");
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -241,7 +242,7 @@ function BookingModal({ hospital, closeModal }) {
                   onChange={(e) => setPatientName(e.target.value)}
                 />
               </div>
-
+              {/* 
               <div className="bmodal-field">
                 <label className="bmodal-label">Age</label>
                 <input
@@ -250,6 +251,32 @@ function BookingModal({ hospital, closeModal }) {
                   type="number"
                   onChange={(e) => setAge(e.target.value)}
                 />
+              </div> */}
+              <div className="bmodal-field">
+                <label className="bmodal-label">Age</label>
+                <input
+                  className="bmodal-input"
+                  placeholder="Age"
+                  type="number"
+                  value={age}
+                  onChange={(e) => {
+                    const value = e.target.value;
+
+                    if (value === "") {
+                      setAge("");
+                      setAgeError("");
+                    } else if (value > 110 || value < 1) {
+                      setAgeError("Enter a valid age");
+                    } else {
+                      setAge(value);
+                      setAgeError("");
+                    }
+                  }}
+                />
+
+                {ageError && (
+                  <p style={{ color: "red", fontSize: "14px" }}>{ageError}</p>
+                )}
               </div>
 
               <div className="bmodal-field">
